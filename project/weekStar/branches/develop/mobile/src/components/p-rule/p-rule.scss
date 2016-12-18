@@ -1,0 +1,64 @@
+@charset 'UTF-8';
+@import '../../sass/base/_mixin';
+@import '../../sass/base/_mobile';
+@import '../../sass/base/commons';
+
+.bgWhite{
+	background: white;
+}
+.g-rule-main{
+	.u-list{
+		padding: 0 rem(24);
+		dt{
+			padding-top: rem(35);
+			color: #333333;
+			font-size: rem(32);
+			.rank{
+               display: inline-block;
+               vertical-align: middle;
+               width: rem(37);
+               height: rem(37);
+               line-height: rem(37);
+               text-align: center;
+               background: #ffdd00;
+               border-radius: 50%;
+               font-size: rem(24);
+               color: #333333;
+               font-style: normal;
+               border:1px solid #1d1d1d;
+			}
+			strong{
+               font-weight: normal;
+               display: inline-block;
+               vertical-align: middle;
+               text-indent: rem(14);
+			}
+		}
+		dd{
+			font-size: rem(24);
+			color: #999999;
+			padding-top: rem(24);
+			h3{
+              padding-bottom: rem(15)
+			}
+			.img1{
+				 display: block;
+				 margin: rem(30) auto rem(40) auto;
+				 width: rem(371);
+				 height: rem(155);
+			}
+			.img2{
+				 display: block;
+				 margin: rem(3) auto rem(3) auto;
+				 width: rem(191);
+				 height: rem(197);				 
+			}
+			.img3{
+				 display: block;
+				 margin: rem(27) auto rem(26) auto;
+				 width: rem(412);
+				 height: rem(233);					 
+			}
+		}
+	}
+}

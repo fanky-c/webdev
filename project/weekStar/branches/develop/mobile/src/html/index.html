@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta content="telephone=no" name="format-detection">
+        <meta content="email=no" name="format-detection">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta name="Keywords" content="Ta的周星，礼物周星，YY语音">
+        <meta name="Description" content="Ta的周星，礼物周星，YY语音">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="flexible" content="maximum-dpr=1">
+        <title>TA的周星</title>
+        <script src="../js/lib/flexLayout/flexLayout-1.3.1.js" inline></script>
+        <script>
+            var stat = {
+                start: new Date()
+            };
+        </script>
+        <link rel="stylesheet" href="../css/index.css" type="text/css">
+        <link rel="prefetch" href="../components/p-index/images/loading.gif"> </head>
+
+    <body>
+        <header> </header>
+        <div class="anchor-wrapper">
+            <!-- + 主播信息 -->
+        </div>
+        <div class="start-wrapper">
+            <h2>TA的周星礼物榜</h2>
+            <table class="start-list">
+                <!-- +周星礼物榜-->
+            </table>
+        </div>
+        <script src="../js/rConfig/rConfig.js" local-usage></script>
+        <script src="../js/lib/requirejs/require.js" data-main="../components/p-index/p-index.js"></script>
+        <script id="anchorInfo" type="text/tmpl">
+            <div class="anchor-icon"><img src="{{icon}}"></div>
+            <div class="anchor-info">
+                <div class="anchor-left">
+                    <ul>
+                        <li class="special nick">{{nick}}</li>
+                        <li>最高排名: <span class="special">{{rank}}</span></li>
+                        <li class="gift-icon">最高排名礼物：<img src="{{gift_icon}}"></li>
+                    </ul>
+                </div>
+                <div class="anchor-right">
+                    <ul>
+                        <li>收到礼物数量：<span class="special">{{numb}}</span></li>
+                        <li>距离上一名数量：<span class="special">{{deviation_forward}}</span></li>
+                        <li>领先后一名数量：<span class="special">{{deviation_backward}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </script>
+        <script id="startInfo" type="text/tmpl">
+            <tr>
+                <th>礼物</th>
+                <th>收到数量</th>
+                <th>主播排名</th>
+            </tr>{{each data as item i}}
+            <tr>
+                <td> <img src="{{item.gift_icon}}"></td>
+                <td>{{item.numb}}</td>{{if item.rank > 100 || item.rank == 0}}
+                <td>99+</td>
+                {{else}}
+                    <td>{{item.rank}}</td>
+                    {{/if}}
+            </tr>
+            {{/each}}
+        </script>
+        <!-- TA的荣誉-->
+        <div id="m-scroll" class="m-scroll"> </div>
+        <!-- TA的荣誉模板-->
+        <script id="honorWrapper" type="text/tmpl">{{if newList.length > 0}}
+            <div class="wrap">
+                <h3 class="ui-title">TA的荣誉</h3>
+                <div class="swiper-container">
+                    <div id="swiper-wrapper" class="swiper-wrapper">{{each newList}}
+                        <ul class="swiper-slide">{{each newList[$index]}}
+                            <li><img src="{{$value.medal_url}}"><span class="term">{{($value.week_of_year || '--') + "期"}} </span></li>
+                            {{/each}}
+                        </ul>
+                        {{/each}}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            {{/if}}
+        </script>
+        <!-- 底部-->
+        <div class="blank100"></div>
+        <div class="cg-footer">
+            <ul class="u-list">
+                <li class="active"> <a href="//web.yy.com/weekStar/index.html">TA的周星</a></li>
+                <li> <span class="line left"></span><a href="//web.yy.com/weekStar/list.html">周星榜单</a><span class="line right"></span></li>
+                <li><a href="//web.yy.com/weekStar/rule.html">周星规则        </a></li>
+            </ul>
+        </div>
+    </body>
+
+</html>
