@@ -393,7 +393,8 @@ path.joinFormat = function(){
     var r = path.join.apply(path, iArgv);
     return r
         .replace(/\\+/g, '/')
-        .replace(/(^http[s]?:)[\/]+/g, '$1//');
+        .replace(/(^http[s]?:)[\/]+/g, '$1//')
+        .replace(/^http[s]?:/g,''); //  针对HTTPS做的特殊处理
 };
 
 config = fn.extend(true, config, localConfig);
