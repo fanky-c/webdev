@@ -1,11 +1,4 @@
 'use strict';
-/*!
- * gulpfile.js for yym-FETeam
- *
- * @author: jackness Lau
- */
-
-
 
 var gulp = require('gulp'),
     fs = require('fs'),
@@ -45,8 +38,10 @@ require('colors');
 var config = require('./config.js');
 var localConfig = fs.existsSync('./config.mine.js')? require('./config.mine.js'): {};
 
-
-
+/**
+ * [fn 工作函数]
+ * @type {Object}
+ */
 var fn = {
     blankPipe: function(){
         return through.obj(function(file, enc, next){next(null, file);});
@@ -396,11 +391,15 @@ path.joinFormat = function(){
     return r
         .replace(/\\+/g, '/')
         .replace(/(^http[s]?:)[\/]+/g, '$1//')
-        .replace(/^http[s]?:/g,''); //  针对HTTPS做的特殊处理
+        .replace(/^http[s]?:/g,''); //  针对HTTPS做的特殊处理，只要相对路径
 };
 
 config = fn.extend(true, config, localConfig);
 
+/**
+ * [task任务函数]
+ * @return {[type]} [description]
+ */
 
 gulp.task('--help', function(){
     console.log([
@@ -453,6 +452,7 @@ gulp.task('-h', function(){
 // 初始化目录
 gulp.task('init', function(){
      //..dosomting
+     console.log('当前是初始任务:'.red, gulp.env);
 });
 
 function ctxRender(ctx){
@@ -515,10 +515,9 @@ function taskHelper(commands){
  * task 执行前初始化函数
  */
 function taskInit(){
-    process.chdir(__dirname);
+    process.chdir(__dirname);  //切换工作目录
 
-    var 
-        commands = process.argv[2],
+    var commands = process.argv[2],
         iConfig;
 
     if(gulp.env.ver){

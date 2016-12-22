@@ -43,7 +43,7 @@ gulp all --ver <version>
 gulp watch
 
 # 压缩合并 执行 all 并且 监听
-gulp watchAll--ver <version>
+gulp watchAll --ver <version>
 
 # 拷贝 config.copy 下的文件
 gulp copy --name <project>
