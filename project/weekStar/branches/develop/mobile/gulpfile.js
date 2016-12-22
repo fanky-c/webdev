@@ -35,14 +35,15 @@ var gulp = require('gulp'),
     rev = require('gulp-rev'),
     clean = require('gulp-clean'),
     server = require('gulp-devserver'),
-    connect = require('gulp-connect'),
     remoteRevData,
     localRevData;
 
+
+//console颜色
 require('colors');
 
-var config = require('./config.js'),
-    localConfig = fs.existsSync('./config.mine.js')? require('./config.mine.js'): {};
+var config = require('./config.js');
+var localConfig = fs.existsSync('./config.mine.js')? require('./config.mine.js'): {};
 
 
 
@@ -388,6 +389,7 @@ var fn = {
         return target;
     }
 };
+
 path.joinFormat = function(){
     var iArgv = Array.prototype.slice.call(arguments);
     var r = path.join.apply(path, iArgv);
@@ -450,9 +452,7 @@ gulp.task('-h', function(){
 
 // 初始化目录
 gulp.task('init', function(){
-
-    //..
-    // init project
+     //..dosomting
 });
 
 function ctxRender(ctx){
@@ -1183,7 +1183,7 @@ gulp.task('watch', function() {
         path.joinFormat(__dirname, iConfig.global.components, '**.*.js')
     ], ['js']);
 
-    // 看守所有图片档
+    // 看守所有images档
     gulp.watch([
         path.joinFormat(__dirname, iConfig.src, 'images/*.*'),
         path.joinFormat(__dirname, iConfig.src, 'components/**/images/*.*'),
@@ -1199,14 +1199,14 @@ gulp.task('watch', function() {
 
 
 });
+
 gulp.task('copy', function(){
     gulp.env.isCommit = true;
     var iConfig = taskInit();
     if(!iConfig){
         return;
     }
-    var 
-        svnConfig = iConfig.svn,
+    var svnConfig = iConfig.svn,
         iBranch = gulp.env.subname;
 
 
@@ -1218,8 +1218,7 @@ gulp.task('copy', function(){
         return;
     }
 
-    var 
-        events = [],
+    var events = [],
         copyHandle = function(src){
             var iPath = path.joinFormat(__dirname, ctxRender(src, iConfig));
             var iStat = fs.statSync(iPath);
@@ -1262,8 +1261,7 @@ gulp.task('concat', function(){
     }
 
 
-    var 
-        events = [],
+    var events = [],
         concatHandle = function(dist, list){
             var iSrcs = [];
             var outputRoot = 'dist';
@@ -1277,22 +1275,20 @@ gulp.task('concat', function(){
             });
             var iStream = gulp.src(iSrcs);
 
-            iStream
-                .pipe(concat(dist))
-                .pipe(gulp.dest(path.join(__dirname, outputRoot)))
-                .pipe(notify({ message: 'concat task complete' }));
+            iStream.pipe(concat(dist))
+                   .pipe(gulp.dest(path.join(__dirname, outputRoot)))
+                   .pipe(notify({ message: 'concat task complete' }));
 
             events.push(iStream);
         };
-    for(var dist in iConfig.dest.concat){
-        if(iConfig.dest.concat.hasOwnProperty(dist)){
-            concatHandle(dist, iConfig.dest.concat[dist]);
-        }
-    }
-    return es.concat.apply(es, events);
-
-
     
+        for(var dist in iConfig.dest.concat){
+            if(iConfig.dest.concat.hasOwnProperty(dist)){
+                concatHandle(dist, iConfig.dest.concat[dist]);
+            }
+        }
+
+       return es.concat.apply(es, events);    
 });
 
 gulp.task('commit', function(done){
@@ -1643,15 +1639,6 @@ gulp.task('devserver', function() {
             }
         }));
 });
-
-gulp.task('connect', function(){
-    connect.server({
-        root: './dist',
-        livereload: true,
-        port: 5000
-    });
-});
-
 
 gulp.task('all', function(done){
     gulp.env.runAll = true;

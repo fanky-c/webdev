@@ -7,6 +7,9 @@ body{
     font-size: rem(24);
     background: white;
 }
+.test111{
+	  @include triangle;
+}
 .g-list-hotNews{
     padding: rem(37) rem(16) rem(47) rem(16);
     zoom:1;

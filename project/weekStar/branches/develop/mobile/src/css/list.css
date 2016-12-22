@@ -1,7 +1,11 @@
 /* var
  * -------------------------- */
-/* mixin
+/* function 
+ * ------------------------- */
+/* mixin( @include)
  * -------------------------- */
+/* page
+ * ----------------------------------------*/
 /* page
  * ----------------------------------------*/
 * {
@@ -121,6 +125,14 @@ header {
 body {
   font-size: 0.32rem;
   background: white; }
+
+.test111 {
+  content: "";
+  height: 0;
+  width: 0;
+  border-top: 5px solid transparent;
+  border-left: 5px dashed transparent;
+  border-right: 5px dashed transparent; }
 
 .g-list-hotNews {
   padding: 0.49333rem 0.21333rem 0.62667rem 0.21333rem;

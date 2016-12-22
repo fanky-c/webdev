@@ -49,7 +49,7 @@ gulp watchAll--ver <version>
 gulp copy --name <project>
 
 # 提交代码 到 测试/ 预发布环境
-gulp commit--sub <branch> --ver <version>
+gulp commit --sub <branch> --ver <version>
 ```
 
 ```

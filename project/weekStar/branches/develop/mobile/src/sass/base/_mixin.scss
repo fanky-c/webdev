@@ -4,12 +4,14 @@ $psdWidth: 640!default; //rem
 $cssjsdate: 201511061220!default;
 
 
-/* mixin
- * -------------------------- */
+/* function 
+ * ------------------------- */
 @function rem($val){
     @return $val / $psdWidth * 10 * 1rem;
 }
 
+/* mixin( @include)
+ * -------------------------- */
 @mixin attr2all($cssAttr, $val...){
     -webkit-#{$cssAttr}: $val;
             #{$cssAttr}: $val;
@@ -22,6 +24,43 @@ $cssjsdate: 201511061220!default;
     @keyframes #{$name} {
         @content;
     }
+}
+
+//inline-block
+@mixin inline-block ($lte7:true){
+  display: inline-block;
+  @if $lte7 {
+    *display: inline;
+    *zoom:1;
+  }
+}
+
+//triangle 
+@mixin triangle($direction:bottom, $size:5px, $borderColor:transparent ) {
+  content:"";
+  height: 0;
+  width: 0;
+
+  @if $direction == top {
+    border-bottom:$size solid $borderColor;
+    border-left:$size dashed transparent;
+    border-right:$size dashed transparent;
+  } 
+  @else if $direction == right {
+    border-left:$size solid $borderColor;
+    border-top:$size dashed transparent;
+    border-bottom:$size dashed transparent;
+  } 
+  @else if $direction == bottom {
+    border-top:$size solid $borderColor;
+    border-left:$size dashed transparent;
+    border-right:$size dashed transparent;
+  } 
+  @else if $direction == left {
+    border-right:$size solid $borderColor;
+    border-top:$size dashed transparent;
+    border-bottom:$size dashed transparent;
+  }
 }
 
 
@@ -75,6 +114,9 @@ $mqViewports: 320px 360px 375px 414px 480px;
     }
 }
 
+
+/* page
+ * ----------------------------------------*/
 %avoid_spacing{
     font-size: 0;
     letter-spacing: -4px;
