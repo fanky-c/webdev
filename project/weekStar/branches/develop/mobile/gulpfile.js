@@ -585,7 +585,7 @@ function taskInit(){
 
 
 /**
- * html
+ * html任务
  */
 
 gulp.task('html', function(done){
