@@ -454,14 +454,21 @@ gulp.task('init', function(){
      //..dosomting
      //console.log('当前是初始任务:'.red, gulp.env);
      var iConfig = taskInit();
-     console.log(iConfig)
+     //console.log(iConfig);
+     console.log('当前显示gulp.env：'.red,gulp.env);
 });
 
+
+/**
+ * [ctxRender description]
+ *  gulp --key 111 --value 222
+ *  gulp.env: { _: [], key: 111, value: 222 }
+ */
 function ctxRender(ctx){
     var vars = gulp.env.vars;
     if(vars){
         for(var key in vars){
-            if(vars.hasOwnProperty(key)){
+            if(vars.hasOwnProperty(key)){  //hasOwnProperty(自定义)自身属性，和继承（toString）相对应
                 ctx = ctx.replace(new RegExp('\\{\\$'+ key +'\\}', 'g'), vars[key]);
             }
         }
@@ -519,7 +526,7 @@ function taskHelper(commands){
 function taskInit(){
     process.chdir(__dirname);  //切换工作目录
 
-    var commands = process.argv[2],
+    var commands = process.argv[2], //控制台获取参数
         iConfig;
 
     if(gulp.env.ver){
