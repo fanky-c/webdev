@@ -477,6 +477,11 @@ function ctxRender(ctx){
 
 }
 
+/**
+ * [taskHelper 提示task的错误]
+ * @param  {[type]} commands [description]
+ * @return {[type]}          [description]
+ */
 function taskHelper(commands){
     var dirs = [];
     var output;
