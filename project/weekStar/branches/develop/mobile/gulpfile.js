@@ -679,7 +679,7 @@ gulp.task('html-task', function(){
             .pipe(replacePath('../images', path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images)))
             .pipe(replacePath(/\.\.\/(components\/[pw]-\w+\/images)/g, path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images, '$1')))
             // .pipe(replacePath('../images', + assetsPath.images))
-            .pipe(gulp.dest( path.joinFormat(__dirname, 'dist', iConfig.dest.path.html )))
+            .pipe(gulp.dest(path.joinFormat(__dirname, 'dist', iConfig.dest.path.html )))
             .pipe(livereload({quiet: true}));
 
         events.push(htmlStream);
@@ -758,7 +758,9 @@ gulp.task('css-task', function() {
     if(!iConfig){
         return;
     }
+
     process.chdir( path.joinFormat(__dirname, iConfig.src, 'components'));
+
     return sass('./', { style: 'nested', 'compass': true })
         .pipe(filter('@(p-)*/*.css'))
         .pipe(through.obj(function(file, enc, next){
@@ -1228,56 +1230,6 @@ gulp.task('watch', function() {
     ], ['html']);
 });
 
-gulp.task('copy', function(){
-    gulp.env.isCommit = true;
-    var iConfig = taskInit();
-    if(!iConfig){
-        return;
-    }
-    var svnConfig = iConfig.svn,
-        iBranch = gulp.env.subname;
-
-
-    if(!iBranch || !svnConfig.path[iBranch]){
-        return console.log(gulp.env.subname + ' is not in svnConfig'.red);
-    }
-
-    if(!svnConfig.copy){
-        return;
-    }
-
-    var events = [],
-        copyHandle = function(src){
-            var iPath = path.joinFormat(__dirname, ctxRender(src, iConfig));
-            var iStat = fs.statSync(iPath);
-            var iStream;
-
-            if(iStat.isDirectory()){
-                console.log('[source] ', path.joinFormat(__dirname, ctxRender(src, iConfig), '**/*.*').yellow);
-                iStream = gulp.src(path.joinFormat(__dirname, ctxRender(src, iConfig), '**/*.*'));
-
-            } else {
-                console.log('[source] ', path.joinFormat(__dirname, ctxRender(src, iConfig)).yellow);
-                iStream = gulp.src([path.joinFormat(__dirname, ctxRender(src, iConfig))]);
-            }
-
-            var dests = svnConfig.copy[src];
-
-
-            dests.forEach(function(dest){
-                console.log('[target] ', path.joinFormat(__dirname, ctxRender(dest)).green);
-                iStream.pipe(gulp.dest(path.joinFormat(__dirname, ctxRender(dest))));
-            });
-            events.push(iStream);
-
-        };
-    for(var src in svnConfig.copy){
-        if(svnConfig.copy.hasOwnProperty(src)){
-            copyHandle(src);
-        }
-    }
-    return es.concat.apply(es, events);
-});
 
 gulp.task('concat', function(){
     var iConfig = taskInit();
@@ -1317,6 +1269,23 @@ gulp.task('concat', function(){
         }
 
        return es.concat.apply(es, events);    
+});
+
+/*
+    开启服务
+ */
+gulp.task('devserver', function() {
+    gulp.src('./src')
+        .pipe(server({
+            livereload: {
+                clientConsole: false
+            },
+            proxy: {
+                enable: true,
+                host: 'http://www.yy.com',
+                urls: /^\/login\//
+            }
+        }));
 });
 
 
@@ -1656,19 +1625,6 @@ gulp.task('commit-step03', function(){
     iPromise.start();
 });
 
-gulp.task('devserver', function() {
-    gulp.src('./src')
-        .pipe(server({
-            livereload: {
-                clientConsole: false
-            },
-            proxy: {
-                enable: true,
-                host: 'http://www.yy.com',
-                urls: /^\/login\//
-            }
-        }));
-});
 
 gulp.task('all', function(done){
     gulp.env.runAll = true;
@@ -1677,6 +1633,57 @@ gulp.task('all', function(done){
 
 gulp.task('all-done', function(){
     gulp.env.runAll = false;
+});
+
+gulp.task('copy', function(){
+    gulp.env.isCommit = true;
+    var iConfig = taskInit();
+    if(!iConfig){
+        return;
+    }
+    var svnConfig = iConfig.svn,
+        iBranch = gulp.env.subname;
+
+
+    if(!iBranch || !svnConfig.path[iBranch]){
+        return console.log(gulp.env.subname + ' is not in svnConfig'.red);
+    }
+
+    if(!svnConfig.copy){
+        return;
+    }
+
+    var events = [],
+        copyHandle = function(src){
+            var iPath = path.joinFormat(__dirname, ctxRender(src, iConfig));
+            var iStat = fs.statSync(iPath);
+            var iStream;
+
+            if(iStat.isDirectory()){
+                console.log('[source] ', path.joinFormat(__dirname, ctxRender(src, iConfig), '**/*.*').yellow);
+                iStream = gulp.src(path.joinFormat(__dirname, ctxRender(src, iConfig), '**/*.*'));
+
+            } else {
+                console.log('[source] ', path.joinFormat(__dirname, ctxRender(src, iConfig)).yellow);
+                iStream = gulp.src([path.joinFormat(__dirname, ctxRender(src, iConfig))]);
+            }
+
+            var dests = svnConfig.copy[src];
+
+
+            dests.forEach(function(dest){
+                console.log('[target] ', path.joinFormat(__dirname, ctxRender(dest)).green);
+                iStream.pipe(gulp.dest(path.joinFormat(__dirname, ctxRender(dest))));
+            });
+            events.push(iStream);
+
+        };
+    for(var src in svnConfig.copy){
+        if(svnConfig.copy.hasOwnProperty(src)){
+            copyHandle(src);
+        }
+    }
+    return es.concat.apply(es, events);
 });
 
 gulp.task('watchAll', ['all', 'watch']);
