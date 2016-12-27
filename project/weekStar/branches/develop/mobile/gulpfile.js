@@ -22,9 +22,9 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     through = require('through2'),
     plumber = require('gulp-plumber'),
-    runSequence = require('run-sequence').use(gulp),
+    runSequence = require('run-sequence').use(gulp),   //按顺序执行
     es = require('event-stream'),
-    prettify = require('gulp-prettify'),
+    prettify = require('gulp-prettify'),  //HTML
     rev = require('gulp-rev'),
     clean = require('gulp-clean'),
     server = require('gulp-devserver'),
@@ -555,7 +555,7 @@ function taskInit(){
 
     if(!iConfig || !iConfig.src){
         taskHelper(commands);
-        process.exit();
+        process.exit();  //退出程序
         return;
 
     } else {
@@ -657,6 +657,7 @@ gulp.task('html-task', function(){
         // html task
         var htmlStream = gulp.src( path.joinFormat(__dirname, iConfig.src, 'html/*.html'))
             .pipe(plumber())
+            //内嵌js
             .pipe(inlinesource())
             // 删除requirejs的配置文件引用
             .pipe(replacePath(/<script [^<]*local-usage\><\/script>/g, ''))
@@ -678,14 +679,13 @@ gulp.task('html-task', function(){
 
             .pipe(replacePath('../images', path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images)))
             .pipe(replacePath(/\.\.\/(components\/[pw]-\w+\/images)/g, path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images, '$1')))
-            // .pipe(replacePath('../images', + assetsPath.images))
             .pipe(gulp.dest(path.joinFormat(__dirname, 'dist', iConfig.dest.path.html )))
             .pipe(livereload({quiet: true}));
 
         events.push(htmlStream);
     // }
 
-    return es.concat.apply(es, events);
+    return es.concat.apply(es, events);   //concat --> merge
 });
 
 
