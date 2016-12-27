@@ -600,7 +600,7 @@ gulp.task('html-task', function(){
 
     var 
         events = [],
-        // tmpl task
+        // tmpl task(生产本地src/html目录)
         tmplStream = gulp.src( path.joinFormat(__dirname, iConfig.src, 'components/@(p-)*/*.jade'))
             .pipe(plumber())
             .pipe(gulpJade({
@@ -654,7 +654,7 @@ gulp.task('html-task', function(){
     events.push(tmplStream);
 
     // if(iConfig.isCommit){
-        // html task
+        // html task(dist)
         var htmlStream = gulp.src( path.joinFormat(__dirname, iConfig.src, 'html/*.html'))
             .pipe(plumber())
             //内嵌js
@@ -724,14 +724,12 @@ gulp.task('js-task', function () {
                 optimize: 'none',
                 mainConfigFile: path.joinFormat(__dirname, iConfig.src, 'js/rConfig/rConfig.js')
             }))
-            // .pipe(iConfig.isCommit? uglify(): through.obj(function(file, enc, next){next();}))
             .pipe(iConfig.isCommit?uglify(): fn.blankPipe())
-            .pipe(rename(function(path){
+            .pipe(rename(function(path){                
                 path.basename = path.basename.replace(/^[pj]-/g,'');
                 path.dirname = '';
             }))
             .pipe(gulp.dest(path.joinFormat(__dirname, 'dist', iConfig.dest.path.js)))
-            // .pipe(notify({ message: 'JS task complete' }))
             .pipe(livereload({quiet: true}));
 
         // js lib Task
@@ -759,7 +757,7 @@ gulp.task('css-task', function() {
         return;
     }
 
-    process.chdir( path.joinFormat(__dirname, iConfig.src, 'components'));
+    process.chdir( path.joinFormat(__dirname, iConfig.src, 'components'));   //改变当前目录
 
     return sass('./', { style: 'nested', 'compass': true })
         .pipe(filter('@(p-)*/*.css'))
@@ -827,15 +825,9 @@ gulp.task('css-task', function() {
         .pipe(replacePath('../components', path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images, 'components')))
         .pipe(iConfig.isCommit?minifycss({
             compatibility: 'ie7'
-        }): fn.blankPipe())
-
-        
-        
+        }): fn.blankPipe())        
         .pipe(gulp.dest( path.joinFormat(__dirname, 'dist', iConfig.dest.path.css)))
-        
-        // .pipe(notify({ message: 'CSS task complete' }))
-        .pipe(livereload({quiet: true}))
-        ;
+        .pipe(livereload({quiet: true}));
 });
 
 
@@ -856,7 +848,6 @@ gulp.task('images-img', function() {
         .pipe(filter(['**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.bmp', '**/*.gif']))
         .pipe(iConfig.isCommit?imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }): fn.blankPipe())
         .pipe(gulp.dest( path.joinFormat(__dirname, 'dist', iConfig.dest.path.images)))
-        // .pipe(notify({ message: 'Images-img task complete' }))
         .pipe(livereload({quiet: true}));
 });
 gulp.task('images-components', function(){
