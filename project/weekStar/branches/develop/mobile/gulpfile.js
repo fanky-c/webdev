@@ -844,7 +844,7 @@ gulp.task('images-img', function() {
     if(!iConfig){
         return;
     }
-    return gulp.src([ path.joinFormat(__dirname, iConfig.src, 'images/**/*.*')], {base: path.joinFormat(__dirname, iConfig.src, 'images')})
+    return gulp.src([path.joinFormat(__dirname, iConfig.src, 'images/**/*.*')], {base: path.joinFormat(__dirname, iConfig.src, 'images')})
         .pipe(filter(['**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.bmp', '**/*.gif']))
         .pipe(iConfig.isCommit?imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }): fn.blankPipe())
         .pipe(gulp.dest( path.joinFormat(__dirname, 'dist', iConfig.dest.path.images)))
@@ -871,7 +871,6 @@ gulp.task('images-components', function(){
         .pipe(plumber())
         .pipe(iConfig.isCommit?imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }): fn.blankPipe())
         .pipe(gulp.dest( path.joinFormat(__dirname, 'dist', iConfig.dest.path.images, 'components')))
-        // .pipe(notify({ message: 'Images-components task complete' }))
         .pipe(livereload({quiet: true}));
 });
 gulp.task('images-globalcomponents', function(){
@@ -903,7 +902,6 @@ gulp.task('images-globalcomponents', function(){
         .pipe(plumber())
         .pipe(filter(['**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.bmp', '**/*.gif']))
         .pipe(gulp.dest(path.joinFormat(__dirname, 'dist', iConfig.dest.path.images, 'globalcomponents')))
-        // .pipe(notify({ message: 'Images-globalcomponents task complete' }))
         .pipe(livereload({quiet: true}));
 });
 
