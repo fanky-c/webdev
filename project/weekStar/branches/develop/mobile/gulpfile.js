@@ -911,33 +911,31 @@ gulp.task('rev', function(done){
 });
 
 gulp.task('rev-clean', function(){
-    var 
-        iConfig = taskInit(),
+    var iConfig = taskInit(),
         md5Filter = filter(function(file){
             return /-[a-zA-Z0-9]{10}\.?\w*\.\w+/.test(file.history);
-
         }, {restore: true});
 
     if(!iConfig){
         return;
     }
      
-    return gulp.src( path.joinFormat(__dirname, 'dist', iConfig.dest.path.root, '**/*.*'), { base: path.joinFormat(__dirname, 'dist') })
-            .pipe(plumber())
-            .pipe(md5Filter)
-            .pipe(clean({force: true}));
+    return gulp.src(path.joinFormat(__dirname, 'dist', iConfig.dest.path.root, '**/*.*')
+                    ,{base: path.joinFormat(__dirname, 'dist')}
+                   )
+                  .pipe(plumber())
+                  .pipe(md5Filter)
+                  .pipe(clean({force: true}));
 });
 
 gulp.task('rev-loadRemote', function(done){
-    var 
-        iConfig = taskInit();
+    var iConfig = taskInit();
 
     if(!iConfig){
         return;
     }
 
-    var
-        iVer = gulp.env.version,
+    var iVer = gulp.env.version,
         revAddr;
 
     if(!iVer){
@@ -971,15 +969,12 @@ gulp.task('rev-loadRemote', function(done){
 });
 
 gulp.task('rev-build', function(){
-    var 
-        iConfig = taskInit();
+    var iConfig = taskInit();
 
     if(!iConfig){
         return;
     }
-    var 
-        
-        now = new Date(),
+    var now = new Date(),
         addZero = function(num) {
             return num < 10 ? '0' + num : '' + num;
         };
@@ -993,18 +988,18 @@ gulp.task('rev-build', function(){
             ], { 
                 base: path.joinFormat(__dirname, 'dist') 
             })
-            .pipe(rev())
-            
+            .pipe(rev())            
             .pipe(gulp.dest(path.joinFormat(__dirname, 'dist')))
             .pipe(rev.manifest())
             .pipe(through.obj(function(file, enc, next){
                 var iCnt = file.contents.toString();
                 try{
-                    var 
-                        iJson = JSON.parse(iCnt);
-                    iJson.version = gulp.env.cssjsdate;
-                    iCnt = JSON.stringify(iJson, null, 4);
-                } catch(er){}
+                    var iJson = JSON.parse(iCnt);
+                        iJson.version = gulp.env.cssjsdate;
+                        iCnt = JSON.stringify(iJson, null, 4);
+                } catch(er){
+                       console.log(er);
+                }
 
                 file.contents = new Buffer(iCnt, 'utf-8');
                 this.push(file);
@@ -1020,7 +1015,6 @@ gulp.task('rev-remote-build', function(){
         iConfig = taskInit(),
         md5Filter = filter(function(file){
             return !/-[a-zA-Z0-9]{10}\.?\w*\.\w+/.test(file.history);
-
         }, {restore: true});
 
     if(!iConfig ||!remoteRevData){
@@ -1135,12 +1129,9 @@ gulp.task('rev-update-task', function(){
         },
         md5Filter = filter(function(file){
             return !/-[a-zA-Z0-9]{10}\.?\w*\.\w+/.test(file.history);
-
         }, {restore: true});
 
     gulp.env.cssjsdate = now.getFullYear() + addZero(now.getMonth() + 1) + addZero(now.getDate()) + addZero(now.getHours()) + addZero(now.getMinutes()) + addZero(now.getSeconds());
-
-
 
     var iPath;
     switch(gulp.env.nowTask){
