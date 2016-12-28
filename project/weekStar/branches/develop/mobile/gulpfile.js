@@ -600,7 +600,7 @@ gulp.task('html-task', function(){
 
     var 
         events = [],
-        // tmpl task(生产本地src/html目录)
+        // tmpl task(jade生产本地src/html目录)
         tmplStream = gulp.src( path.joinFormat(__dirname, iConfig.src, 'components/@(p-)*/*.jade'))
             .pipe(plumber())
             .pipe(gulpJade({
@@ -653,8 +653,7 @@ gulp.task('html-task', function(){
 
     events.push(tmplStream);
 
-    // if(iConfig.isCommit){
-        // html task(dist)
+        // html task(dist/html)
         var htmlStream = gulp.src( path.joinFormat(__dirname, iConfig.src, 'html/*.html'))
             .pipe(plumber())
             //内嵌js
@@ -683,7 +682,6 @@ gulp.task('html-task', function(){
             .pipe(livereload({quiet: true}));
 
         events.push(htmlStream);
-    // }
 
     return es.concat.apply(es, events);   //concat --> merge
 });
@@ -784,7 +782,6 @@ gulp.task('css-task', function() {
                     return $1 + rPath + $3;
 
                 } else {
-
                     console.log(([
                         '',
                         '[error] css url replace error!',
