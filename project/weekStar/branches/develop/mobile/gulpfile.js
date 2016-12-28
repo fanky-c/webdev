@@ -1109,14 +1109,6 @@ gulp.task('rev-replace', function(){
 
 });
 
-gulp.task('rev-update', function(done){
-    if(gulp.env.runAll){
-        done();
-    } else {
-        runSequence('rev-loadRemote', 'rev-update-task', 'rev-remote-build', 'rev-dataInit', 'rev-replace', done);
-    }
-});
-
 gulp.task('rev-update-task', function(){
     var iConfig = taskInit();
     if(!iConfig){
@@ -1171,6 +1163,13 @@ gulp.task('rev-update-task', function(){
             .pipe(gulp.dest(path.joinFormat(__dirname, 'dist', iConfig.dest.path.assets)));
 });
 
+gulp.task('rev-update', function(done){
+    if(gulp.env.runAll){
+        done();
+    } else {
+        runSequence('rev-loadRemote', 'rev-update-task', 'rev-remote-build', 'rev-dataInit', 'rev-replace', done);
+    }
+});
 
 gulp.task('watch', function() {
     var iConfig = taskInit();
