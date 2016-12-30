@@ -179,7 +179,7 @@ var fn = {
      *
      * @return {Void}
      */
-    removeFiles: function(list, callback, filters){///{
+    removeFiles: function(list, callback, filters){
         if(!fn.isArray(list)){
             list = [list];
         }
@@ -190,10 +190,12 @@ var fn = {
                 }
                 try{
                     fs.unlinkSync(file);
-                } catch(er){}
+                } catch(er){
+                      console.log(er);
+                }
 
-            },
-            rmPath = function(iPath, filters){
+            };
+        var rmPath = function(iPath, filters){
                 var list = fs.readdirSync(iPath);
 
                 list.forEach(function(item){
@@ -208,7 +210,9 @@ var fn = {
                             rmPath(file, filters);
                             try{
                                 fs.rmdirSync(file);
-                            } catch(er){}
+                            } catch(er){
+                                 console.log(er);
+                            }
 
                         } else {
                             rmFile(file);
@@ -221,7 +225,6 @@ var fn = {
             if(!item || !fs.existsSync(item)){
                 return;
             }
-
             var stat = fs.statSync(item);
             if(stat.isDirectory()){
                 rmPath(item, filters);
@@ -233,7 +236,7 @@ var fn = {
         if(callback){
             callback();
         }
-    },///}
+    },
 
 
     /**
@@ -1285,7 +1288,6 @@ gulp.task('commit-step01', function(done){
         iBranch = gulp.env.subname;
 
     gulp.env.commitTime = new Date();
-    
 
     if(!iBranch || !svnConfig.path[iBranch]){
         return console.log(gulp.env.subname + ' is not in svnConfig'.red);
@@ -1320,31 +1322,31 @@ gulp.task('commit-step01', function(done){
             NEXT();
         }
     }).then(function(NEXT){ // update git
-        // update 文件
-        if(gitConfig.update){
-            var iPromise = new fn.Promise();
+        // update 文件（暂时用svn）
+        // if(gitConfig.update){
+        //     var iPromise = new fn.Promise();
 
-            gitConfig.update.forEach(function(iPath){
-                var mPath = path.joinFormat(__dirname, ctxRender(iPath));
-                iPromise.then(function(next){
-                    console.log(('git pull \n['+ mPath +']').yellow);
-                    fn.runCMD('git pull', function(){
-                        console.log('done'.green);
-                        next();
-                    }, mPath, true);
-                });
+        //     gitConfig.update.forEach(function(iPath){
+        //         var mPath = path.joinFormat(__dirname, ctxRender(iPath));
+        //         iPromise.then(function(next){
+        //             console.log(('git pull \n['+ mPath +']').yellow);
+        //             fn.runCMD('git pull', function(){
+        //                 console.log('done'.green);
+        //                 next();
+        //             }, mPath, true);
+        //         });
                 
-            });
-            iPromise.then(function(){
-                console.log('git config.udpate is done'.yellow);
-                NEXT();
-            });
-            iPromise.start();
+        //     });
+        //     iPromise.then(function(){
+        //         console.log('git config.udpate is done'.yellow);
+        //         NEXT();
+        //     });
+        //     iPromise.start();
 
-        } else {
-            console.log('git config.udpate is blank'.yellow);
-            NEXT();
-        }
+        // } else {
+        //     console.log('git config.udpate is blank'.yellow);
+        //     NEXT();
+        // }
         
     }).then(function(next){ // 添加 被删除的文件夹
         var delPath = [];
@@ -1407,6 +1409,7 @@ gulp.task('commit-step01', function(done){
     // 拉取 svn 
 });
 
+
 gulp.task('commit-step02', function(done){
     gulp.env.isCommit = true;
 
@@ -1415,8 +1418,7 @@ gulp.task('commit-step02', function(done){
         return;
     }
 
-    var 
-        svnConfig = iConfig.svn,
+    var svnConfig = iConfig.svn,
         assetsPath = [],
         delFiles = [],
         revRelate = path.relative(iConfig.dest.path.assets, './');
@@ -1539,8 +1541,7 @@ gulp.task('commit-step03', function(){
     if(!iConfig){
         return;
     }
-    var 
-        svnConfig = iConfig.svn,
+    var svnConfig = iConfig.svn,
         gitConfig = iConfig.git,
         iBranch = gulp.env.subname;
 
@@ -1571,21 +1572,22 @@ gulp.task('commit-step03', function(){
             });
         });
     }
-    if(gitConfig.commit){
-       gitConfig.commit.forEach(function(iPath){
-            iPromise.then(function(next){
-                var mPath = path.joinFormat(__dirname, ctxRender(iPath));
-                console.log(('['+ mPath +']' + '\ncommit start').yellow);
-                fn.runCMD([
-                    'git add',
-                    'git commit -m "gulpAutoCommit"'
-                ].join(' && '), function(){
-                    console.log('done'.green);
-                    next();
-                }, mPath);
-            });
-        }); 
-    }
+    //（暂时用svn）
+    // if(gitConfig.commit){
+    //    gitConfig.commit.forEach(function(iPath){
+    //         iPromise.then(function(next){
+    //             var mPath = path.joinFormat(__dirname, ctxRender(iPath));
+    //             console.log(('['+ mPath +']' + '\ncommit start').yellow);
+    //             fn.runCMD([
+    //                 'git add',
+    //                 'git commit -m "gulpAutoCommit"'
+    //             ].join(' && '), function(){
+    //                 console.log('done'.green);
+    //                 next();
+    //             }, mPath);
+    //         });
+    //     }); 
+    // }
     iPromise.then(function(next){
         console.log('all is done'.green);
         if(gulp.env.commitTime){
