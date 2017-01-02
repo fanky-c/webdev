@@ -38,7 +38,7 @@ var
             update: [
                 '{$PATH}',
             ],
-            copy: {
+            copy: {  //复制元
                 'dist': [
                     '{$PATH}'
                 ]
