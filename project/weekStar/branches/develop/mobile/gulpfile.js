@@ -1647,7 +1647,7 @@ gulp.task('copy', function(){
             }
 
             var dests = svnConfig.copy[src];
-
+                console.log(dests)
 
             dests.forEach(function(dest){
                 console.log('[target] ', path.joinFormat(__dirname, ctxRender(dest)).green);

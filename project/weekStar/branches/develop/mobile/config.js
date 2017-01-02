@@ -34,7 +34,6 @@ var
                 commit: '../../commit/mobile',
                 trunk: '../../../trunk/mobile'
             },
-
             update: [
                 '{$PATH}',
             ],
