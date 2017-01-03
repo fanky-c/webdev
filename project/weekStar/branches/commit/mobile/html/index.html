@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta content="telephone=no" name="format-detection">
+        <meta content="email=no" name="format-detection">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta name="Keywords" content="Ta的周星，礼物周星，YY语音">
+        <meta name="Description" content="Ta的周星，礼物周星，YY语音">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <meta name="flexible" content="maximum-dpr=1">
+        <title>TA的周星</title>
+        <script>!function(e,t){function i(t){var i=n.getBoundingClientRect().width,a=i/10;n.style.fontSize=a+"px",d.rem=e.rem=a,t&&t()}var a,r=e.document,n=r.documentElement,o=r.querySelector('meta[name="viewport"]'),l=r.querySelector('meta[name="flexible"]'),m=0,s=0,d=t.flexible||(t.flexible={});if(o){console.warn("将根据已有的meta标签来设置缩放比例");var p=o.getAttribute("content").match(/initial\-scale=([\d\.]+)/);p&&(s=parseFloat(p[1]),m=parseInt(1/s))}else if(l){var c=l.getAttribute("content");if(c){var u=c.match(/initial\-dpr=([\d\.]+)/),f=c.match(/maximum\-dpr=([\d\.]+)/);u&&(m=parseFloat(u[1]),s=parseFloat((1/m).toFixed(2))),f&&(m=parseFloat(f[1]),s=parseFloat((1/m).toFixed(2)))}}if(!m&&!s){var v=(e.navigator.appVersion.match(/android/gi),e.navigator.appVersion.match(/iphone/gi)),h=e.devicePixelRatio;m=v?h>=3&&(!m||m>=3)?3:h>=2&&(!m||m>=2)?2:1:1,s=1/m}if(n.setAttribute("data-dpr",m),!o)if(o=r.createElement("meta"),o.setAttribute("name","viewport"),o.setAttribute("content","initial-scale="+s+", maximum-scale="+s+", minimum-scale="+s+", user-scalable=no"),n.firstElementChild)n.firstElementChild.appendChild(o);else{var x=r.createElement("div");x.appendChild(o),r.write(x.innerHTML)}e.addEventListener("resize",function(){clearTimeout(a),a=setTimeout(i,300)},!1),e.addEventListener("pageshow",function(e){e.persisted&&(clearTimeout(a),a=setTimeout(i,300))},!1),"complete"===r.readyState?r.body.style.fontSize=12*m+"px":r.addEventListener("DOMContentLoaded",function(e){r.body.style.fontSize=12*m+"px"},!1),i(),d.dpr=e.dpr=m,d.refreshRem=i,d.rem2px=function(e){var t=parseFloat(e)*this.rem;return"string"==typeof e&&e.match(/rem$/)&&(t+="px"),t},d.px2rem=function(e){var t=parseFloat(e)/this.rem;return"string"==typeof e&&e.match(/px$/)&&(t+="rem"),t}}(window,window.lib||(window.lib={}));</script>
+        <script>
+            var stat = {
+                start: new Date()
+            };
+        </script>
+        <link rel="stylesheet" href="//web.yystatic.com/project/weekStar/mobile/css/index-48f58c290b.css" type="text/css">
+        <link rel="prefetch" href="//web.yystatic.com/project/weekStar/mobile/images/components/p-index/images/loading-29ca04c66d.gif"> </head>
+
+    <body>
+        <header> </header>
+        <div class="anchor-wrapper">
+            <!-- + 主播信息 -->
+        </div>
+        <div class="start-wrapper">
+            <h2>TA的周星礼物榜</h2>
+            <table class="start-list">
+                <!-- +周星礼物榜-->
+            </table>
+        </div>
+        
+        <script src="//web.yystatic.com/project/weekStar/mobile/js/lib/requirejs/require-7de96de31b.js" data-main="//web.yystatic.com/project/weekStar/mobile/js/index-fcf12c5792.js"></script>
+        <script id="anchorInfo" type="text/tmpl">
+            <div class="anchor-icon"><img src="{{icon}}"></div>
+            <div class="anchor-info">
+                <div class="anchor-left">
+                    <ul>
+                        <li class="special nick">{{nick}}</li>
+                        <li>最高排名: <span class="special">{{rank}}</span></li>
+                        <li class="gift-icon">最高排名礼物：<img src="{{gift_icon}}"></li>
+                    </ul>
+                </div>
+                <div class="anchor-right">
+                    <ul>
+                        <li>收到礼物数量：<span class="special">{{numb}}</span></li>
+                        <li>距离上一名数量：<span class="special">{{deviation_forward}}</span></li>
+                        <li>领先后一名数量：<span class="special">{{deviation_backward}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </script>
+        <script id="startInfo" type="text/tmpl">
+            <tr>
+                <th>礼物</th>
+                <th>收到数量</th>
+                <th>主播排名</th>
+            </tr>{{each data as item i}}
+            <tr>
+                <td> <img src="{{item.gift_icon}}"></td>
+                <td>{{item.numb}}</td>{{if item.rank > 100 || item.rank == 0}}
+                <td>99+</td>
+                {{else}}
+                    <td>{{item.rank}}</td>
+                    {{/if}}
+            </tr>
+            {{/each}}
+        </script>
+        <!-- TA的荣誉-->
+        <div id="m-scroll" class="m-scroll"> </div>
+        <!-- TA的荣誉模板-->
+        <script id="honorWrapper" type="text/tmpl">{{if newList.length > 0}}
+            <div class="wrap">
+                <h3 class="ui-title">TA的荣誉</h3>
+                <div class="swiper-container">
+                    <div id="swiper-wrapper" class="swiper-wrapper">{{each newList}}
+                        <ul class="swiper-slide">{{each newList[$index]}}
+                            <li><img src="{{$value.medal_url}}"><span class="term">{{($value.week_of_year || '--') + "期"}} </span></li>
+                            {{/each}}
+                        </ul>
+                        {{/each}}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            {{/if}}
+        </script>
+        <!-- 底部-->
+        <div class="blank100"></div>
+        <div class="cg-footer">
+            <ul class="u-list">
+                <li class="active"> <a href="//web.yy.com/weekStar/index.html">TA的周星</a></li>
+                <li> <span class="line left"></span><a href="//web.yy.com/weekStar/list.html">周星榜单</a><span class="line right"></span></li>
+                <li><a href="//web.yy.com/weekStar/rule.html">周星规则        </a></li>
+            </ul>
+        </div>
+    </body>
+
+</html>

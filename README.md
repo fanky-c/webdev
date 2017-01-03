@@ -1,6 +1,6 @@
 # webdev
 
-#删除远程文件
+#删除远程文件（本地文件还保留）
 git rm -r --cached 
 
 git commit -m 'delete'
