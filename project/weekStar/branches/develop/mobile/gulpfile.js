@@ -238,6 +238,18 @@ var fn = {
         }
     },
 
+    mkdirsSync: function(dirname){
+        var she = this;
+        if (fs.existsSync(dirname)) {
+            return true;
+        } else {
+            if (she.mkdirsSync(path.dirname(dirname))) {
+                fs.mkdirSync(dirname);
+                return true;
+            }
+        }
+    },
+
 
     /**
      * 判断是否数组
@@ -1730,7 +1742,9 @@ gulp.task('commit-step01_1', function(done){
     }).then(function(delPath ,next){ // 添加 被删除的文件夹
         delPath.forEach(function(iPath){
             if(!path.extname(iPath) && !fs.existsSync(iPath)){
-                fs.mkdirSync(iPath);
+                console.log(iPath.red)
+                fn.mkdirsSync(iPath)
+                //fs.mkdirSync(iPath);
             }
         });
         console.log('svn.update, svn.commit files doc added'.yellow);
