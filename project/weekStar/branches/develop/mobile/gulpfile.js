@@ -1302,10 +1302,10 @@ gulp.task('commit-step01', function(done){
                 var mPath = path.joinFormat(__dirname, ctxRender(iPath));
                 iPromise.then(function(next){
                     console.log(('svn update \n['+ mPath +']').yellow);
-                    // fn.runCMD('svn update', function(){
-                    //     console.log('done'.green);
-                    //     next();
-                    // }, mPath, true);
+                    fn.runCMD('svn update', function(){
+                        console.log('done'.green);
+                        next();
+                    }, mPath, true);
                 });
                 
             });
@@ -1498,15 +1498,15 @@ gulp.task('commit-step02', function(done){
             if(fs.existsSync(src)){
                 iPromise.then(function(next){
                     console.log(('[del] file: ' + src).yellow);
-                    // fn.runCMD([
-                    //     'svn del ' + path.basename(src) + ' --force',
-                    // ].join(' && '), function(){
-                    //     console.log('done'.green);
-                    //     if(fs.existsSync(src)){
-                    //         fs.unlinkSync(src);
-                    //     }
-                    //     next();
-                    // }, path.dirname(src));
+                    fn.runCMD([
+                        'svn del ' + path.basename(src) + ' --force',
+                    ].join(' && '), function(){
+                        console.log('done'.green);
+                        if(fs.existsSync(src)){
+                            fs.unlinkSync(src);
+                        }
+                        next();
+                    }, path.dirname(src));
 
                 });
             }
@@ -1556,18 +1556,18 @@ gulp.task('commit-step03', function(){
             iPromise.then(function(next){
                 var mPath = path.joinFormat(__dirname, ctxRender(iPath));
                 console.log(('['+ mPath +']' + '\ncommit start').yellow);
-                // fn.runCMD([
-                //     'svn cleanup',
-                //     'svn add * --force',
-                //     'svn commit -m gulpAutoCommit'
-                // ].join(' && '), function(){
-                //     console.log('done'.green);
-                //     next();
-                // }, mPath);
+                fn.runCMD([
+                    'svn cleanup',
+                    'svn add * --force',
+                    'svn commit -m gulpAutoCommit'
+                ].join(' && '), function(){
+                    console.log('done'.green);
+                    next();
+                }, mPath);
             });
         });
     }
-    //（暂时用svn）
+    //（暂时不用git）
     // if(gitConfig.commit){
     //    gitConfig.commit.forEach(function(iPath){
     //         iPromise.then(function(next){
@@ -1667,7 +1667,7 @@ gulp.task('watchAll', ['all', 'watch']);
 
 
 /**
- *   Test----
+ *   自己手动提交，不自动svn和git
  */
 
 gulp.task('commit-step01_1', function(done){
