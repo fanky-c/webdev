@@ -477,7 +477,6 @@ function ctxRender(ctx){
         }
     }
     return ctx;
-
 }
 
 /**
@@ -541,7 +540,7 @@ function taskInit(){
         gulp.env.version = gulp.env.ver;
     }
 
-    if(gulp.env.sub){
+    if(gulp.env.sub){  //分支  --sub
         gulp.env.subname = gulp.env.sub;
 
     }
@@ -552,7 +551,6 @@ function taskInit(){
         iConfig = config;
 
     }
-
 
     var isCommit = gulp.env.isCommit;
 
@@ -1304,10 +1302,10 @@ gulp.task('commit-step01', function(done){
                 var mPath = path.joinFormat(__dirname, ctxRender(iPath));
                 iPromise.then(function(next){
                     console.log(('svn update \n['+ mPath +']').yellow);
-                    fn.runCMD('svn update', function(){
-                        console.log('done'.green);
-                        next();
-                    }, mPath, true);
+                    // fn.runCMD('svn update', function(){
+                    //     console.log('done'.green);
+                    //     next();
+                    // }, mPath, true);
                 });
                 
             });
@@ -1376,15 +1374,14 @@ gulp.task('commit-step01', function(done){
     }).then(function(delPath ,NEXT){ // update 被删除的文件
         var iPromise = new fn.Promise();
 
-
         delPath.forEach(function(iPath){
             iPromise.then(function(next){
                 console.log(('svn update ['+ iPath +']').yellow);
                 process.chdir(iPath);
-                fn.runCMD('svn update', function(){
-                    console.log('done'.green);
-                    next();
-                }, path.joinFormat(iPath), true);
+                // fn.runCMD('svn update', function(){
+                //     console.log('done'.green);
+                //     next();
+                // }, path.joinFormat(iPath), true);
             });
             
         });
@@ -1423,6 +1420,7 @@ gulp.task('commit-step02', function(done){
         delFiles = [],
         revRelate = path.relative(iConfig.dest.path.assets, './');
 
+
     svnConfig.commit.forEach(function(item){
         if(/assets/.test(item)){
             assetsPath.push(item);
@@ -1445,8 +1443,7 @@ gulp.task('commit-step02', function(done){
                 } else if(b == 'rev-manifest.json'){
                     return 1;
                 } else {
-                    var 
-                        aVer = +a.replace(/rev-manifest-(\d+)\.json/, '$1'),
+                    var aVer = +a.replace(/rev-manifest-(\d+)\.json/, '$1'),
                         bVer = +b.replace(/rev-manifest-(\d+)\.json/, '$1');
 
 
@@ -1459,8 +1456,7 @@ gulp.task('commit-step02', function(done){
                 oldRevs = files.slice(3);
                 keepRevs = files.slice(0, 3);
                 oldRevs.forEach(function(oldRev){
-                    var 
-                        revFile = path.joinFormat(iPath, oldRev),
+                    var revFile = path.joinFormat(iPath, oldRev),
                         revData = require(revFile),
                         delPath;
 
@@ -1480,8 +1476,7 @@ gulp.task('commit-step02', function(done){
                 });
 
                 keepRevs.forEach(function(revPath){ // 保留 最新的 3 个 版本下生成的文件
-                    var 
-                        revData = require(path.join(iPath, revPath)),
+                    var revData = require(path.join(iPath, revPath)),
                         keepPath;
 
                     for(var key in revData){
@@ -1503,15 +1498,15 @@ gulp.task('commit-step02', function(done){
             if(fs.existsSync(src)){
                 iPromise.then(function(next){
                     console.log(('[del] file: ' + src).yellow);
-                    fn.runCMD([
-                        'svn del ' + path.basename(src) + ' --force',
-                    ].join(' && '), function(){
-                        console.log('done'.green);
-                        if(fs.existsSync(src)){
-                            fs.unlinkSync(src);
-                        }
-                        next();
-                    }, path.dirname(src));
+                    // fn.runCMD([
+                    //     'svn del ' + path.basename(src) + ' --force',
+                    // ].join(' && '), function(){
+                    //     console.log('done'.green);
+                    //     if(fs.existsSync(src)){
+                    //         fs.unlinkSync(src);
+                    //     }
+                    //     next();
+                    // }, path.dirname(src));
 
                 });
             }
@@ -1561,14 +1556,14 @@ gulp.task('commit-step03', function(){
             iPromise.then(function(next){
                 var mPath = path.joinFormat(__dirname, ctxRender(iPath));
                 console.log(('['+ mPath +']' + '\ncommit start').yellow);
-                fn.runCMD([
-                    'svn cleanup',
-                    'svn add * --force',
-                    'svn commit -m gulpAutoCommit'
-                ].join(' && '), function(){
-                    console.log('done'.green);
-                    next();
-                }, mPath);
+                // fn.runCMD([
+                //     'svn cleanup',
+                //     'svn add * --force',
+                //     'svn commit -m gulpAutoCommit'
+                // ].join(' && '), function(){
+                //     console.log('done'.green);
+                //     next();
+                // }, mPath);
             });
         });
     }
@@ -1665,3 +1660,288 @@ gulp.task('copy', function(){
 });
 
 gulp.task('watchAll', ['all', 'watch']);
+
+
+
+
+
+
+/**
+ *   Test----
+ */
+
+gulp.task('commit-step01_1', function(done){
+    gulp.env.isCommit = true;
+
+    var iConfig = taskInit();
+    if(!iConfig){
+        return;
+    }
+    var svnConfig = iConfig.svn,
+        gitConfig = iConfig.git,
+        iBranch = gulp.env.subname;
+
+    gulp.env.commitTime = new Date();
+
+    if(!iBranch || !svnConfig.path[iBranch]){
+        return console.log(gulp.env.subname + ' is not in svnConfig'.red);
+    }
+
+    console.log('commit step 01 start'.yellow);
+
+    new fn.Promise(function(NEXT){ // 删除动态文件
+        // update 文件
+        if(svnConfig.update){
+            var iPromise = new fn.Promise();
+
+            svnConfig.update.forEach(function(iPath){
+                var mPath = path.joinFormat(__dirname, ctxRender(iPath));
+                iPromise.then(function(next){
+                    console.log(('svn update \n['+ mPath +']').yellow);
+                    next();
+                });
+                
+            });
+            iPromise.then(function(){
+                console.log('svn config.udpate is done'.yellow);
+                NEXT();
+            });
+            iPromise.start();
+
+        } else {
+            console.log('svn config.udpate is blank'.yellow);
+            NEXT();
+        }
+    }).then(function(next){ // 添加 被删除的文件夹
+        var delPath = [];
+
+        // 删除 commit 设置下的文件
+        if(svnConfig.commit){
+            svnConfig.commit.forEach(function(iPath){
+                delPath.push(path.joinFormat(__dirname, ctxRender(iPath)));
+            });
+        }
+
+        fn.removeFiles(delPath, function(){
+            console.log('svn.update, svn.commit files deleted'.yellow);
+            next(delPath);
+        });
+
+    }).then(function(delPath ,next){ // 添加 被删除的文件夹
+        delPath.forEach(function(iPath){
+            if(!path.extname(iPath) && !fs.existsSync(iPath)){
+                fs.mkdirSync(iPath);
+            }
+        });
+        console.log('svn.update, svn.commit files doc added'.yellow);
+
+        next(delPath);
+
+    }).then(function(delPath ,NEXT){ // update 被删除的文件
+        var iPromise = new fn.Promise();
+
+        delPath.forEach(function(iPath){
+            iPromise.then(function(next){
+                console.log(('svn update ['+ iPath +']').yellow);
+                process.chdir(iPath);
+                // fn.runCMD('svn update', function(){
+                //     console.log('done'.green);
+                //     next();
+                // }, path.joinFormat(iPath), true);
+                next();
+            });
+            
+        });
+
+        iPromise.then(function(){
+            console.log('svn.update, svn.commit files updated'.yellow);
+            NEXT();
+        });
+        iPromise.start();
+
+    }).then(function(){
+        console.log('commit step 01 passed'.green);
+
+        if(svnConfig.onBeforeCommit){
+            console.log('onBeofreCommit task run'.yellow);
+            svnConfig.onBeforeCommit(iBranch);
+        }
+
+        done();
+
+    }).start();
+});
+
+gulp.task('commit-step02_1', function(done){
+    gulp.env.isCommit = true;
+
+    var iConfig = taskInit();
+    if(!iConfig){
+        return;
+    }
+
+    var svnConfig = iConfig.svn,
+        assetsPath = [],
+        delFiles = [],
+        revRelate = path.relative(iConfig.dest.path.assets, './');
+
+
+    svnConfig.commit.forEach(function(item){
+        if(/assets/.test(item)){
+            assetsPath.push(item);
+        }
+    });
+
+    if(assetsPath.length){
+        console.log('commit step 02 start: rev svn Path clean');
+
+        assetsPath.forEach(function(src){
+            var iPath = path.joinFormat(__dirname, ctxRender(src));
+            var files = fs.readdirSync(iPath);
+            var oldRevs;
+            var keepRevs;
+            
+            // 排序
+            files.sort(function(a,b){
+                if(a === 'rev-manifest.json'){
+                    return -1;
+                } else if(b == 'rev-manifest.json'){
+                    return 1;
+                } else {
+                    var aVer = +a.replace(/rev-manifest-(\d+)\.json/, '$1'),
+                        bVer = +b.replace(/rev-manifest-(\d+)\.json/, '$1');
+
+
+                    return bVer - aVer;
+                }
+
+            });
+
+            if(files.length >= 3){ // 删除最新版本 往下 三个版本以后生成的文件 
+                oldRevs = files.slice(3);
+                keepRevs = files.slice(0, 3);
+                oldRevs.forEach(function(oldRev){
+                    var revFile = path.joinFormat(iPath, oldRev),
+                        revData = require(revFile),
+                        delPath;
+
+                    for(var key in revData){
+                        if(revData.hasOwnProperty(key) && key != 'version'){
+                            delPath = path.joinFormat(iPath, revRelate, revData[key]);
+                            if(!~delFiles.indexOf(delPath)){
+                                delFiles.push(delPath);
+                            }
+                        }
+                    }
+
+                    // 删除对应的 rev-manifest.json
+                    if(!~delFiles.indexOf(revFile)){
+                        delFiles.push(revFile);
+                    }
+                });
+
+                keepRevs.forEach(function(revPath){ // 保留 最新的 3 个 版本下生成的文件
+                    var revData = require(path.join(iPath, revPath)),
+                        keepPath;
+
+                    for(var key in revData){
+                        if(revData.hasOwnProperty(key) && key != 'version'){
+                            keepPath = path.joinFormat(iPath, revRelate, revData[key]);
+                            if(~delFiles.indexOf(keepPath)){
+                                delFiles.splice(delFiles.indexOf(keepPath), 1);
+                            }
+                        }
+                    }
+                });
+            }
+
+        });
+
+        var iPromise = new fn.Promise();
+
+        delFiles.forEach(function(src){
+            if(fs.existsSync(src)){
+                iPromise.then(function(next){
+                    console.log(('[del] file: ' + src).yellow);
+                    // fn.runCMD([
+                    //     'svn del ' + path.basename(src) + ' --force',
+                    // ].join(' && '), function(){
+                    //     console.log('done'.green);
+                    //     if(fs.existsSync(src)){
+                    //         fs.unlinkSync(src);
+                    //     }
+                    //     next();
+                    // }, path.dirname(src));
+                      next();
+                });
+            }
+        });
+        iPromise.then(function(){
+            console.log('==============');
+            console.log('del file done');
+            console.log('total ' + delFiles.length + ' files need delete');
+            console.log('commit step 02 done'.green);
+            console.log('==============');
+            return done();
+        });
+        iPromise.start();
+        
+
+    } else {
+        console.log('commit step 02 done, no assetsPath in svn commit'.yellow);
+        return done();
+    }
+
+});
+
+gulp.task('commit-step03_1', function(){
+    gulp.env.isCommit = true;
+
+    var iConfig = taskInit();
+    if(!iConfig){
+        return;
+    }
+    var svnConfig = iConfig.svn,
+        gitConfig = iConfig.git,
+        iBranch = gulp.env.subname;
+
+    
+
+    if(!iBranch || !svnConfig.path[iBranch]){
+        return console.log(gulp.env.subname + ' is not in svnConfig'.red);
+    }
+
+
+    console.log('commit step 03 start'.yellow);
+    // svn commit！
+    var iPromise = new fn.Promise();
+
+    if(svnConfig.commit){
+        svnConfig.commit.forEach(function(iPath){
+            iPromise.then(function(next){
+                var mPath = path.joinFormat(__dirname, ctxRender(iPath));
+                console.log(('['+ mPath +']' + '\ncommit start').yellow);
+                next();
+            });
+        });
+    }
+
+    iPromise.then(function(next){
+        console.log('all is done'.green);
+        if(gulp.env.commitTime){
+            var cost = new Date() -  gulp.env.commitTime;
+            var min = Math.floor(cost / 1000 / 60);
+            var sec = Math.floor(cost / 1000) % 60;
+            var us = cost % 1000;
+            console.log(('total ' + min + ' m ' + sec + ' s ' + us + 'ms').green);
+        }
+        next();
+    });
+
+    iPromise.start();
+});
+
+gulp.task('commitNoCmd', function(done){
+    gulp.env.isCommit = true;
+    runSequence('commit-step01_1', 'all', 'copy', 'commit-step02_1', 'commit-step03_1', done);
+});
