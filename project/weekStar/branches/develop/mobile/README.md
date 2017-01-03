@@ -50,6 +50,10 @@ gulp copy --name <project>
 
 # 提交代码 到 测试/ 预发布环境
 gulp commit --sub <branch> --ver <version>
+
+
+# 提交代码 到 测试/ 预发布环境(不会自动提交)
+gulp commitNoCmd --sub <branch> --ver <version>
 ```
 
 ```

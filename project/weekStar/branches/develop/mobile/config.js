@@ -1,6 +1,5 @@
 'use strict';
-var 
-    config = {
+var config = {
         src: 'src',
         global: {
             components: '',
