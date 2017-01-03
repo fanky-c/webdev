@@ -237,7 +237,12 @@ var fn = {
             callback();
         }
     },
-
+    
+    /**
+     * [mkdirsSync 创建目录]
+     * @param  {[type]} dirname [description]
+     * @return {[type]}         [description]
+     */
     mkdirsSync: function(dirname){
         var she = this;
         if (fs.existsSync(dirname)) {
