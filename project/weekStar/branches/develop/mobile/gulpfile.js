@@ -7,11 +7,11 @@ var gulp = require('gulp'),
     path = require('path'),
     querystring = require('querystring'),
     sass = require('gulp-ruby-sass'), // sass compiler
-    //sass = require('gulp-sass'), // sass compiler
     minifycss = require('gulp-minify-css'), // minify css files
     jshint = require('gulp-jshint'), // check js syntac
     uglify = require('gulp-uglify'), // uglify js files
     imagemin = require('gulp-imagemin'), // minify images
+    pngquant = require('imagemin-pngquant'),
     rename = require('gulp-rename'), // rename the files
     concat = require('gulp-concat'), // concat the files into single file
     notify = require('gulp-notify'), // notify the msg during running tasks
@@ -777,7 +777,7 @@ gulp.task('css-task', function() {
 
     process.chdir( path.joinFormat(__dirname, iConfig.src, 'components'));   //改变当前目录
 
-    return sass('./', { style: 'nested', 'compass': true })
+    return sass('./', { style: 'nested'}) //, 'compass': true 默认是false,不引入项目sass配置
         .pipe(filter('@(p-)*/*.css'))
         .pipe(through.obj(function(file, enc, next){
             var iCnt = file.contents.toString();
@@ -863,7 +863,7 @@ gulp.task('images-img', function() {
     }
     return gulp.src([path.joinFormat(__dirname, iConfig.src, 'images/**/*.*')], {base: path.joinFormat(__dirname, iConfig.src, 'images')})
         .pipe(filter(['**/*.jpg', '**/*.jpeg', '**/*.png', '**/*.bmp', '**/*.gif']))
-        .pipe(iConfig.isCommit?imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }): fn.blankPipe())
+        .pipe(iConfig.isCommit?imagemin({progressive: true, use: [pngquant()] }): fn.blankPipe())
         .pipe(gulp.dest( path.joinFormat(__dirname, 'dist', iConfig.dest.path.images)))
         .pipe(livereload({quiet: true}));
 });
@@ -886,7 +886,7 @@ gulp.task('images-components', function(){
             base: path.joinFormat(__dirname, iConfig.src, 'components')
         })
         .pipe(plumber())
-        .pipe(iConfig.isCommit?imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }): fn.blankPipe())
+        .pipe(iConfig.isCommit?imagemin({ progressive: true, use: [pngquant()]}): fn.blankPipe())
         .pipe(gulp.dest( path.joinFormat(__dirname, 'dist', iConfig.dest.path.images, 'components')))
         .pipe(livereload({quiet: true}));
 });
@@ -1276,7 +1276,6 @@ var host = {
     //html: 'index.html'
 };
 
-//mac chrome: "Google chrome", 
 var browser = os.platform() === 'linux' ? 'Google chrome' : (
               os.platform() === 'darwin' ? 'Google chrome' : (
               os.platform() === 'win32' ? 'chrome' : 'firefox'));
