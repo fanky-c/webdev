@@ -1,7 +1,7 @@
 require(['jQuery', 'artTemplate','fastclick','lazyload','jsonp','reportPhoneEvent2'],function ($,template,attachFastClick,lazyload) {
     //fackclick
     $(function(){
-    	attachFastClick.attach(document.body);   
+    	attachFastClick.attach(document.body);
     });
 
      

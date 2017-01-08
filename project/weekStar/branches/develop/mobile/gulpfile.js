@@ -1226,21 +1226,6 @@ gulp.task('watch', function() {
     ], ['html']);
 });
 
-
-/*
-    开启服务
- */
-var host = {
-    path: path.joinFormat(__dirname, 'dist'),
-    port: 3008,
-    html: 'index.html'
-};
-
-//mac chrome: "Google chrome", 
-var browser = os.platform() === 'linux' ? 'Google chrome' : (
-              os.platform() === 'darwin' ? 'Google chrome' : (
-              os.platform() === 'win32' ? 'chrome' : 'firefox'));
-
 gulp.task('concat', function(){
     var iConfig = taskInit();
     if(!iConfig){
@@ -1281,6 +1266,21 @@ gulp.task('concat', function(){
        return es.concat.apply(es, events);    
 });
 
+
+/*
+    开启服务
+ */
+var host = {
+    path: path.joinFormat(__dirname, 'src'),
+    port: 3008,
+    //html: 'index.html'
+};
+
+//mac chrome: "Google chrome", 
+var browser = os.platform() === 'linux' ? 'Google chrome' : (
+              os.platform() === 'darwin' ? 'Google chrome' : (
+              os.platform() === 'win32' ? 'chrome' : 'firefox'));
+
 gulp.task('connect', function () {
     connect.server({
         root: host.path,
@@ -1293,7 +1293,8 @@ gulp.task('open', function (done) {
     gulp.src('')
         .pipe(gulpOpen({
             app: browser,
-            uri: 'http://localhost:3001/html/'
+            uri: 'http://localhost:'+ host.port
+            //uri: 'http://localhost:'+ host.port +'/html/'
         }))
         .on('end', done);
 });
