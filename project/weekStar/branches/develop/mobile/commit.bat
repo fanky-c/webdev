@@ -1,3 +1,2 @@
-d:
-cd D:\webdev\project\weekStar\branches\develop\mobile
-gulp commit --sub commit
+echo gulp commit ...
+gulp commitNoCmd --sub commit
