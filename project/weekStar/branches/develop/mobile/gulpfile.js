@@ -417,6 +417,7 @@ path.joinFormat = function(){
 };
 
 config = fn.extend(true, config, localConfig);
+var hostname = config.dest.hostname;
 
 /**
  * [task任务函数]
@@ -689,15 +690,15 @@ gulp.task('html-task', function(){
                         path.join(__dirname, iConfig.global.components)
                     )
                 ),
-                path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images, 'globalcomponents')
+                path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.images, 'globalcomponents')
             ))
-            .pipe(replacePath('../js/lib', path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.jsLib)))
-            .pipe(replacePath(/\.\.\/components\/p-\w+\/p-(\w+).js/g, path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.js, '/$1.js')))
+            .pipe(replacePath('../js/lib', path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.jsLib)))
+            .pipe(replacePath(/\.\.\/components\/p-\w+\/p-(\w+).js/g, path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.js, '/$1.js')))
 
-            .pipe(replacePath('../css', path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.css)))
+            .pipe(replacePath('../css', path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.css)))
 
-            .pipe(replacePath('../images', path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images)))
-            .pipe(replacePath(/\.\.\/(components\/[pw]-\w+\/images)/g, path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images, '$1')))
+            .pipe(replacePath('../images', path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.images)))
+            .pipe(replacePath(/\.\.\/(components\/[pw]-\w+\/images)/g, path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.images, '$1')))
             .pipe(gulp.dest(path.joinFormat(__dirname, 'dist', iConfig.dest.path.html )))
             .pipe(livereload({quiet: true}));
 
@@ -835,11 +836,11 @@ gulp.task('css-task', function() {
                     path.join(__dirname, iConfig.global.components)
                 )
             ),
-            path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images, 'globalcomponents')
+            path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.images, 'globalcomponents')
         ))
 
-        .pipe(replacePath('../images', path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images)))
-        .pipe(replacePath('../components', path.joinFormat(iConfig.dest.hostname, iConfig.dest.path.images, 'components')))
+        .pipe(replacePath('../images', path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.images)))
+        .pipe(replacePath('../components', path.joinFormat(hostname[Math.floor(Math.random() * hostname.length)], iConfig.dest.path.images, 'components')))
         .pipe(iConfig.isCommit?minifycss({
             compatibility: 'ie7'
         }): fn.blankPipe())        

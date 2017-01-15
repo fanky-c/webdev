@@ -6,7 +6,7 @@ var config = {
             lib: ''
         },
         dest: {
-            hostname: 'http://web.yystatic.com/project/weekStar/mobile',
+            hostname: ['http://web.yystatic.com/project/weekStar/mobile','http://web1.yystatic.com/project/weekStar/mobile','http://web2.yystatic.com/project/weekStar/mobile'],
             revAddr: '',
             path: {
                 'root': '',
