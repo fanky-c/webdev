@@ -13,7 +13,7 @@ var config = {
                 'js': 'js',
                 'jsLib': 'js/lib',
                 'css': 'css',
-                'images': '/images',
+                'images': 'images',
                 'html': 'html',
                 'assets': 'assets'
             }
